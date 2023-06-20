@@ -7,11 +7,11 @@ spring:
               - id: user
                 uri: http://localhost:8081
                 predicates:
-                    - Path=/user/**
+                    - Path=/users/**
               - id: post
                 uri: http://localhost:8082
                 predicates:
-                    - Path=/post/**
+                    - Path=/posts/**
 
 server:
     port: 8080
