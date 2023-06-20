@@ -1,6 +1,6 @@
 package com.example.microservicepost.controller
 
-import com.example.microservicepost.domain.Post
+import com.example.microservicepost.dto.PostDto
 import com.example.microservicepost.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.*
 class PostController(private val postService: PostService) {
 
     @GetMapping("/posts")
-    fun getAllPosts(): ResponseEntity<List<Post>> {
-        val posts = postService.getAllPosts()
+    fun getAllPosts(): ResponseEntity<List<PostDto.PostDtoRes>> {
+        val posts = postService.getAllPosts();
         return ResponseEntity.ok(posts)
     }
 
     @GetMapping("/posts/{id}")
-    fun getPostById(@PathVariable id: Long): ResponseEntity<Post> {
+    fun getPostById(@PathVariable id: Long): ResponseEntity<PostDto.PostDtoRes> {
         val post = postService.getPostById(id)
         return if (post != null) {
             ResponseEntity.ok(post)
@@ -24,18 +24,17 @@ class PostController(private val postService: PostService) {
             ResponseEntity.notFound().build()
         }
     }
-
     @PostMapping("/posts")
-    fun createPost(@RequestBody post: Post): ResponseEntity<Post> {
-        val createdPost = postService.createPost(post)
+    fun createPost(@RequestBody postDTO: PostDto.PostDtoReq): ResponseEntity<PostDto.PostDtoRes> {
+        val createdPost = postService.createPost(postDTO)
         return ResponseEntity.status(HttpStatus.CREATED).body(createdPost)
     }
 
     @PutMapping("/posts/{id}")
-    fun updatePost(@PathVariable id: Long, @RequestBody updatedPost: Post): ResponseEntity<Post> {
-        val post = postService.updatePost(id, updatedPost)
-        return if (post != null) {
-            ResponseEntity.ok(post)
+    fun updatePost(@PathVariable id: Long, @RequestBody updatedPostDTO: PostDto.PostDtoReq): ResponseEntity<PostDto.PostDtoRes> {
+        val updatedPost = postService.updatePost(id, updatedPostDTO)
+        return if (updatedPost != null) {
+            ResponseEntity.ok(updatedPost)
         } else {
             ResponseEntity.notFound().build()
         }
