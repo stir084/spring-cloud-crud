@@ -11,7 +11,7 @@ class PostController(private val postService: PostService) {
 
     @GetMapping("/posts")
     fun getAllPosts(): ResponseEntity<List<PostDto.PostDtoRes>> {
-        val posts = postService.getAllPosts();
+        val posts = postService.getAllPosts()
         return ResponseEntity.ok(posts)
     }
 

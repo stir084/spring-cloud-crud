@@ -4,6 +4,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.nio.charset.StandardCharsets
 import java.util.*
 
 
@@ -22,7 +23,7 @@ class TokenGenerator (
             .setSubject(username)
             .setIssuedAt(now)
             .setExpiration(expiryDate)
-            .signWith(SignatureAlgorithm.HS512, secretKey)
+            .signWith(SignatureAlgorithm.HS512, secretKey) // jaxb 의존성 추가
             .compact()
     }
 }

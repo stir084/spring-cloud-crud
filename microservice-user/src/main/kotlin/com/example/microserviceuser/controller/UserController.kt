@@ -25,7 +25,7 @@ class UserController(private val userService: UserService, private val tokenGene
         if (isAuthenticated) {
             // 로그인 성공 시 JWT 토큰을 생성합니다.
             val token = tokenGenerator.generateToken(loginRequest.username)
-            return ResponseEntity.ok(UserDto.LoginResponse(token))
+            return ResponseEntity.ok(UserDto.LoginResponse("Bearer $token"))
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }

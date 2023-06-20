@@ -7,11 +7,19 @@ spring:
             - id: user
               uri: http://localhost:8090
               predicates:
-                  - Path=/users/**
+                - Path=/users/**
             - id: post
               uri: http://localhost:8091
               predicates:
-                  - Path=/posts/**
+                - Path=/posts/**
+              filters:
+                - JwtValidationFilterFactory
+            - id: user2
+              uri: http://localhost:8090
+              predicates:
+                - Path=/users/myinfo
+              filters:
+                - JwtValidationFilterFactory
   config:
     import: optional:configserver:http://localhost:8888
 server:
