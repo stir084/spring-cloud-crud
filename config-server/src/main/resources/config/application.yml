@@ -6,7 +6,7 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none #create
     properties:
       hibernate:
         #        show_sql: true
@@ -16,3 +16,6 @@ logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.type: trace
 
+jwt:
+  secret: "stir"
+  expiration: 86400000

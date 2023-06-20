@@ -1,18 +1,19 @@
 spring:
-    application:
-      name: gateway-server
-    cloud:
-      gateway:
-          routes:
-              - id: user
-                uri: http://localhost:8081
-                predicates:
-                    - Path=/users/**
-              - id: post
-                uri: http://localhost:8082
-                predicates:
-                    - Path=/posts/**
-
+  application:
+    name: gateway-server
+  cloud:
+    gateway:
+        routes:
+            - id: user
+              uri: http://localhost:8090
+              predicates:
+                  - Path=/users/**
+            - id: post
+              uri: http://localhost:8091
+              predicates:
+                  - Path=/posts/**
+  config:
+    import: optional:configserver:http://localhost:8888
 server:
     port: 8080
 eureka:
