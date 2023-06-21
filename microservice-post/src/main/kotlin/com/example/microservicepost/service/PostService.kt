@@ -4,6 +4,7 @@ import com.example.microservicepost.domain.Post
 import com.example.microservicepost.dto.PostDto
 import com.example.microservicepost.repository.PostRepository
 import org.springframework.stereotype.Service
+import java.lang.IllegalArgumentException
 
 @Service
 class PostService(private val postRepository: PostRepository) {
@@ -19,13 +20,19 @@ class PostService(private val postRepository: PostRepository) {
     }
 
     fun createPost(postDto: PostDto.PostDtoReq): PostDto.PostDtoRes {
-        val post = Post.createPost(postDto.title, postDto.content)
+        val post = Post.createPost(postDto.username, postDto.title, postDto.content)
         val savedPost = postRepository.save(post)
         return PostDto.PostDtoRes(savedPost.id, savedPost.title, savedPost.content, savedPost.createdAt)
     }
 
-    fun updatePost(id: Long, postDtoReq: PostDto.PostDtoReq): PostDto.PostDtoRes? {
-        val existingPost = postRepository.findById(id).orElse(null)
+    fun updatePost(postDtoReq: PostDto.PostDtoReq): PostDto.PostDtoRes? {
+
+        val existingPost = postRepository.findById(postDtoReq.id).orElse(null)
+
+        if(!postDtoReq.username.equals(existingPost.username)){
+            throw IllegalArgumentException("권한 없음")
+        }
+
         if (existingPost != null) {
             existingPost.title = postDtoReq.title
             existingPost.content = postDtoReq.content
@@ -36,7 +43,15 @@ class PostService(private val postRepository: PostRepository) {
         return null
     }
 
-    fun deletePost(id: Long) {
+    fun deletePost(id: Long, username: String) {
+        val existingPost = postRepository.findById(id).get()
+        if (existingPost != null) {
+            if(!username.equals(existingPost.username)){
+                throw IllegalArgumentException("삭제 권한 없음")
+            }
+        } else {
+            throw IllegalArgumentException("게시글 없음")
+        }
         postRepository.deleteById(id)
     }
 }

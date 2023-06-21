@@ -1,6 +1,6 @@
-package com.example.gatewayserver
+package com.example.microservicepost
 
-import com.msa.gateway.exception.JwtValidationException
+
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
@@ -9,6 +9,10 @@ import org.springframework.stereotype.Component
 import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.util.*
+import javax.xml.bind.DatatypeConverter
+
+
+
 
 @Component
 class JwtTokenProvider(
@@ -20,13 +24,12 @@ class JwtTokenProvider(
 
 
     fun extractUsernameFromToken(token: String): String {
-
+        val token = extractTokenFromHeader(token)
         return Jwts.parser()
-            .setSigningKey(secretKey.toByteArray(StandardCharsets.UTF_8))
+            .setSigningKey(DatatypeConverter.parseBase64Binary(secretKey))
             .parseClaimsJws(token)
-            .body
+            .getBody()
             .subject
-        //여기서 이름꺼낼수있으니 굳이 User Domain 가져올 필요 없음.
     }
 
     fun validateToken(token: String): Boolean {

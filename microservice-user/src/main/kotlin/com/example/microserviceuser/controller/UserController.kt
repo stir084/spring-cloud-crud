@@ -5,9 +5,7 @@ import com.example.microserviceuser.dto.UserDto
 import com.example.microserviceuser.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class UserController(private val userService: UserService, private val tokenGenerator: TokenGenerator) {
@@ -28,5 +26,11 @@ class UserController(private val userService: UserService, private val tokenGene
             return ResponseEntity.ok(UserDto.LoginResponse("Bearer $token"))
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+    }
+
+    @GetMapping
+    fun getMyInfo(@RequestHeader("username") username: String): ResponseEntity<UserDto.UserResponse> {
+        val myInfo = userService.getMyInfo(username)
+        return ResponseEntity.ok(myInfo)
     }
 }

@@ -1,6 +1,8 @@
 package com.example.microserviceuser.service
 
 import com.example.microserviceuser.domain.User
+import com.example.microserviceuser.dto.UserDto
+import com.example.microserviceuser.exception.CannotFindUserException
 import com.example.microserviceuser.repository.UserRepository
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -19,5 +21,11 @@ class UserService(
     fun authenticate(username: String, password: String): Boolean {
         val user = userRepository.findByUsername(username)
         return user != null && passwordEncoder.matches(password, user.password)
+    }
+
+    fun getMyInfo(username: String): UserDto.UserResponse {
+        val user = userRepository.findByUsername(username)
+            ?: throw CannotFindUserException(username)
+        return UserDto.UserResponse(user.id, user.username)
     }
 }
