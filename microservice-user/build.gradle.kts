@@ -46,6 +46,7 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt:0.9.1")
 	runtimeOnly("com.mysql:mysql-connector-j")
 	implementation("javax.xml.bind:jaxb-api:2.3.0")
+	implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 /*	compileOnly("org.projectlombok:lombok")
 	annotationProcessor("org.projectlombok:lombok")*/
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

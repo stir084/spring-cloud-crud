@@ -2,35 +2,33 @@
   <div class="board-list">
     <v-container>
       <v-row>
-        <v-col cols="12">
-          <v-data-table
-              :headers="headers"
-              :items="list"
-              item-key="idx"
-              class="elevation-1"
-              :footer-props="{
+        <v-col cols="8">
+          <v-card class="elevation-1">
+            <v-card-text>
+              <v-data-table :headers="headers" :items="list" item-key="idx" :footer-props="{
                 'items-per-page-text': '페이지 당 보여질 갯수',
-              }"
-               :header-align="'left'"
-              :align="'left'"
-
-            >
-            <template v-slot:item="{ item }">
-              <tr>
-                <td>{{ item.title }}</td>
-                <td><a v-on:click="fnView(item.id)">{{ item.title }}</a></td>
-                <td>{{ item.username }}</td>
-                <td>{{ item.createdAt }}</td>
-              </tr>
-            </template>
-          </v-data-table>
-           <v-btn
-              color="primary"
-              @click="fnWrite"
-              class="ml-auto"
-            >
-              글쓰기
-            </v-btn>
+              }" :header-align="'left'" :align="'left'">
+                <template v-slot:item="{ item }">
+                  <tr>
+                    <td>{{ item.id }}</td>
+                    <td><a v-on:click="fnView(item.id)">{{ item.title }}</a></td>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.createdAt }}</td>
+                  </tr>
+                </template>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="8" class="text-right">
+          <v-btn color="primary" @click="fnMyInfo" class="mr-2">
+              내 정보 조회
+          </v-btn>
+          <v-btn color="primary" @click="fnWrite">
+            글쓰기
+          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -87,7 +85,7 @@ export default {
       this.$axios.get("/posts", {
         headers: { Authorization: localStorage.getItem('token') }
       }).then((res) => {
-       // alert(res.data[0].username)
+        console.log(res.data[0])
         this.list = res.data  //서버에서 데이터를 목록으로 보내므로 바로 할당하여 사용할 수 있다.
       }).catch((err) => {
         if (err.message.indexOf('Network Error') > -1) {
@@ -96,8 +94,13 @@ export default {
       })
     },
     fnWrite() {
-      // 글쓰기 버튼 클릭 시 처리 로직 작성
-      // 필요한 코드 추가
+      this.$router.push('/write');      
+    },
+    fnView(id) {
+      this.$router.push({ path: '/detail', query: { id: id } })
+    },
+    fnMyInfo() {
+      this.$router.push('/myInfo')
     }
   }
 }

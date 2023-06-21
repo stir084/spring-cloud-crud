@@ -14,6 +14,7 @@ class PostDto {
         val id: Long,
         val title: String,
         val username: String,
+        val content: String,
         val createdAt: LocalDateTime
     )
 }

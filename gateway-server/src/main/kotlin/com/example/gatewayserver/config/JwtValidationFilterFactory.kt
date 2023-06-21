@@ -15,7 +15,6 @@ class JwtValidationFilterFactory(private val jwtTokenProvider: JwtTokenProvider)
             val request = exchange.request
             val authHeader = request.headers.getFirst(HttpHeaders.AUTHORIZATION)
             val token = jwtTokenProvider.extractTokenFromHeader(authHeader)
-
             if (jwtTokenProvider.validateToken(token)) {
                 val username = jwtTokenProvider.extractUsernameFromToken(token)
                 request.mutate().header("username", username).build()

@@ -19,6 +19,26 @@ const routes = [
     path: '/register',
     name: 'register',
     component: () => import(/* webpackChunkName: "about" */ '../views/RegisterView.vue')
+  },
+  {
+    path: '/write',
+    name: 'write',
+    component: () => import(/* webpackChunkName: "about" */ '../views/PostWriteView.vue')
+  },
+  {
+    path: '/detail',
+    name: 'detail',
+    component: () => import(/* webpackChunkName: "about" */ '../views/PostDetailView.vue'),
+  },
+  {
+    path: '/edit',
+    name: 'edit',
+    component: () => import(/* webpackChunkName: "about" */ '../views/PostEditView.vue')
+  },
+  {
+    path: '/myinfo',
+    name: '/myinfo',
+    component: () => import(/* webpackChunkName: "about" */ '../views/MyInfoView.vue')
   }
 ]
 

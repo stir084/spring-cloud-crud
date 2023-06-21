@@ -19,13 +19,21 @@ class PostController(private val postService: PostService, private val jwtTokenP
 
     @GetMapping("/posts/{id}")
     fun getPostById(@PathVariable id: Long): ResponseEntity<PostDto.PostDtoRes> {
-        val post = postService.getPostById(id)
-        return if (post != null) {
-            ResponseEntity.ok(post)
+        val postDtoRes = postService.getPostById(id)
+        return if (postDtoRes != null) {
+            ResponseEntity.ok(postDtoRes)
         } else {
             ResponseEntity.notFound().build()
         }
     }
+
+    @GetMapping("/posts/mypost-count")
+    fun getMyPostCount(@RequestHeader("Authorization") authrization: String): Long {
+        val username = jwtTokenProvider.extractUsernameFromToken(authrization)
+        val count: Long = postService.getPostByUsername(username)
+        return count;
+    }
+
     @PostMapping("/posts")
     fun createPost(@RequestHeader("Authorization") authrization: String,
                    @RequestBody postDTO: PostDto.PostDtoReq): ResponseEntity<PostDto.PostDtoRes> {
@@ -41,7 +49,7 @@ class PostController(private val postService: PostService, private val jwtTokenP
         val username = jwtTokenProvider.extractUsernameFromToken(authrization)
         val postDTOWithUsername = updatedPostDTO.copy(username = username)
 
-        val updatedPost = postService.updatePost(postDTOWithUsername)
+        val updatedPost = postService.updatePost(id, postDTOWithUsername)
         return if (updatedPost != null) {
             ResponseEntity.ok(updatedPost)
         } else {

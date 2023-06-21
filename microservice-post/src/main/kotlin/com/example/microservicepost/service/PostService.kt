@@ -10,24 +10,23 @@ import java.lang.IllegalArgumentException
 class PostService(private val postRepository: PostRepository) {
     fun getAllPosts(): List<PostDto.PostDtoRes> {
         return postRepository.findAll().map { post ->
-            PostDto.PostDtoRes(post.id, post.title, post.content, post.createdAt)
+            PostDto.PostDtoRes(post.id, post.title, post.username, post.content, post.createdAt)
         }
     }
 
     fun getPostById(id: Long): PostDto.PostDtoRes {
         val post = postRepository.findById(id).orElse(null)
-        return PostDto.PostDtoRes(post.id, post.title, post.content, post.createdAt)
+        return PostDto.PostDtoRes(post.id, post.title, post.username, post.content, post.createdAt)
     }
 
     fun createPost(postDto: PostDto.PostDtoReq): PostDto.PostDtoRes {
         val post = Post.createPost(postDto.username, postDto.title, postDto.content)
         val savedPost = postRepository.save(post)
-        return PostDto.PostDtoRes(savedPost.id, savedPost.title, savedPost.content, savedPost.createdAt)
+        return PostDto.PostDtoRes(savedPost.id, savedPost.title, post.username, savedPost.content, savedPost.createdAt)
     }
 
-    fun updatePost(postDtoReq: PostDto.PostDtoReq): PostDto.PostDtoRes? {
-
-        val existingPost = postRepository.findById(postDtoReq.id).orElse(null)
+    fun updatePost(id: Long, postDtoReq: PostDto.PostDtoReq): PostDto.PostDtoRes? {
+        val existingPost = postRepository.findById(id).orElse(null)
 
         if(!postDtoReq.username.equals(existingPost.username)){
             throw IllegalArgumentException("권한 없음")
@@ -38,7 +37,7 @@ class PostService(private val postRepository: PostRepository) {
             existingPost.content = postDtoReq.content
             var updatedPost = postRepository.save(existingPost)
 
-            return PostDto.PostDtoRes(updatedPost.id, updatedPost.title, updatedPost.content, updatedPost.createdAt)
+            return PostDto.PostDtoRes(updatedPost.id, updatedPost.title, updatedPost.content, updatedPost.content, updatedPost.createdAt)
         }
         return null
     }
@@ -53,5 +52,10 @@ class PostService(private val postRepository: PostRepository) {
             throw IllegalArgumentException("게시글 없음")
         }
         postRepository.deleteById(id)
+    }
+
+    fun getPostByUsername(username: String): Long {
+        val postList = postRepository.findByUsername(username)
+        return postList.size.toLong()
     }
 }

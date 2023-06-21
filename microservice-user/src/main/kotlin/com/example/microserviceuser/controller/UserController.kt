@@ -1,14 +1,17 @@
 package com.example.microserviceuser.controller
 
+import com.example.microserviceuser.config.JwtTokenProvider
 import com.example.microserviceuser.config.TokenGenerator
 import com.example.microserviceuser.dto.UserDto
 import com.example.microserviceuser.service.UserService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-class UserController(private val userService: UserService, private val tokenGenerator: TokenGenerator) {
+class UserController(private val userService: UserService,
+                     private val tokenGenerator: TokenGenerator, private val jwtTokenProvider: JwtTokenProvider) {
     @PostMapping("/users/register")
     fun registerUser(@RequestBody registerRequest: UserDto.RegisterRequest): ResponseEntity<UserDto.UserResponse> {
         val user = userService.registerUser(registerRequest.username, registerRequest.password)
@@ -28,9 +31,12 @@ class UserController(private val userService: UserService, private val tokenGene
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
 
-    @GetMapping
-    fun getMyInfo(@RequestHeader("username") username: String): ResponseEntity<UserDto.UserResponse> {
-        val myInfo = userService.getMyInfo(username)
-        return ResponseEntity.ok(myInfo)
+    @GetMapping("/users/myinfo")
+    fun getMyInfo(@RequestHeader("Authorization") authrization: String): ResponseEntity<UserDto.UserResponse> {
+        val username = jwtTokenProvider.extractUsernameFromToken(authrization)
+        val userResponse = userService.getMyInfo(authrization, username)
+        return ResponseEntity.ok(userResponse)
     }
 }
+
+

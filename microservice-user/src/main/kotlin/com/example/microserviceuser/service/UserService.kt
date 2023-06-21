@@ -1,16 +1,21 @@
 package com.example.microserviceuser.service
 
+import com.example.microserviceuser.FeignClientInterface
 import com.example.microserviceuser.domain.User
 import com.example.microserviceuser.dto.UserDto
 import com.example.microserviceuser.exception.CannotFindUserException
 import com.example.microserviceuser.repository.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder,
+    private val feignClientInterface: FeignClientInterface
 ) {
     fun registerUser(username: String, password: String): User {
         val encodedPassword = passwordEncoder.encode(password)
@@ -23,9 +28,10 @@ class UserService(
         return user != null && passwordEncoder.matches(password, user.password)
     }
 
-    fun getMyInfo(username: String): UserDto.UserResponse {
+    fun getMyInfo(authorization: String, username: String): UserDto.UserResponse {
+        val myPostCount: Long = feignClientInterface.getMyPostCount(authorization)
         val user = userRepository.findByUsername(username)
             ?: throw CannotFindUserException(username)
-        return UserDto.UserResponse(user.id, user.username)
+        return UserDto.UserResponse(user.id, user.username, myPostCount)
     }
 }
