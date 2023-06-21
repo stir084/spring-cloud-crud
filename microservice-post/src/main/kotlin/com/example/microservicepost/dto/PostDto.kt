@@ -13,7 +13,7 @@ class PostDto {
     data class PostDtoRes(
         val id: Long,
         val title: String,
-        val content: String,
+        val username: String,
         val createdAt: LocalDateTime
     )
 }

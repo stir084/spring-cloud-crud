@@ -1,4 +1,4 @@
-package com.example.gatewayserver
+package com.example.gatewayserver.config
 
 import io.jsonwebtoken.*
 import org.springframework.beans.factory.annotation.Value

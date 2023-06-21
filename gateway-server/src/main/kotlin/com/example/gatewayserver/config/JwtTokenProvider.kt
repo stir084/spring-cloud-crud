@@ -1,6 +1,5 @@
-package com.example.gatewayserver
+package com.example.gatewayserver.config
 
-import com.msa.gateway.exception.JwtValidationException
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts

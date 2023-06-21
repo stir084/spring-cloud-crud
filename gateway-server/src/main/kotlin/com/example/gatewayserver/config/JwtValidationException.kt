@@ -1,4 +1,4 @@
-package com.msa.gateway.exception
+package com.example.gatewayserver.config
 
 import java.lang.RuntimeException
 

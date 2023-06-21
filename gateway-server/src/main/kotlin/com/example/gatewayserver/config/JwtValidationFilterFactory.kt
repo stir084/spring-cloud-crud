@@ -1,12 +1,9 @@
-package com.example.gatewayserver
+package com.example.gatewayserver.config
 
 import org.apache.http.HttpHeaders
 import org.springframework.cloud.gateway.filter.GatewayFilter
 import org.springframework.cloud.gateway.filter.factory.GatewayFilterFactory
-import org.springframework.http.HttpStatus
-import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
-import reactor.core.publisher.Mono
 
 
 @Component
