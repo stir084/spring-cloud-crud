@@ -10,6 +10,9 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
+import java.lang.Exception
+import java.lang.IllegalArgumentException
+import java.sql.SQLIntegrityConstraintViolationException
 
 @Service
 class UserService(
@@ -19,8 +22,16 @@ class UserService(
 ) {
     fun registerUser(username: String, password: String): User {
         val encodedPassword = passwordEncoder.encode(password)
-        val user = User(username = username, password = encodedPassword)
-        return userRepository.save(user)
+        var user = User(username = username, password = encodedPassword)
+        try {
+            user = userRepository.save(user)
+        } catch (e: Exception){
+            println("zzzz")
+            throw IllegalArgumentException("데이터 중복")
+        }
+
+
+        return user
     }
 
     fun authenticate(username: String, password: String): Boolean {

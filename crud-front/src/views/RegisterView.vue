@@ -69,10 +69,13 @@ export default {
         alert(this.username + "님 가입완료 되었습니다.")
         this.$router.push('/');
       }).catch((err) => {
+        console.log(err)
         if (err.message.indexOf('Network Error') > -1) {
           alert('네트워크가 원활하지 않습니다.\n잠시 후 다시 시도해주세요.')
         } else if (err.message.indexOf('400') > -1) {
           alert("잘못된 요청입니다.")
+        } else if (err.message.indexOf('500') > -1) {
+          alert("중복 회원 입니다.")
         }
       })
       
