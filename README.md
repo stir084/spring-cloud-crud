@@ -7,7 +7,7 @@ MSA 환경 실습을 위해 만들어 본 CRUD 게시판 입니다.
 - Kotlin
 - Mysql
 - Vue 2
-- Armeria(gRPC)
+- Armeria(gRPC) - 개발 예정
 
 
 ## 구조도 
